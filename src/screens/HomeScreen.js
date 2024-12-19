@@ -4,9 +4,12 @@ import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import Menu from "../components/Menu";
+
 
 const HomeScreen = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigation = useNavigation();
 
   const jobCategories = [
     {
@@ -28,38 +31,6 @@ const HomeScreen = () => {
     },
   ];
 
-  const Menu = ({ navigation }) => (
-    <SafeAreaView style={styles.menuOverlay}>
-      <View style={styles.menuHeader}>
-        <Text style={styles.logo}>Job$cout</Text>
-        <TouchableOpacity onPress={() => setIsMenuOpen(false)}>
-          <Feather name="x" size={24} color="#1D1B3F" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.menuLinks}>
-        <TouchableOpacity onPress={() => {navigation.navigate("Home"); setIsMenuOpen(false);}}>
-          <Text style={styles.menuLink}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-          <Text style={styles.menuLink}>Search</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("About")}>
-          <Text style={styles.menuLink}>About</Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity style={styles.signInButton}>
-        <Text style={styles.signInText}>Sign In / Register</Text>
-      </TouchableOpacity>
-
-      <View style={styles.menuFooter}>
-        <Text style={styles.contactTitle}>Contact us:</Text>
-        <Text style={styles.contactInfo}>vttranviet@gmail.com</Text>
-        <Text style={styles.contactInfo}>+358449760862</Text>
-      </View>
-    </SafeAreaView>
-  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,9 +43,7 @@ const HomeScreen = () => {
 
       <ScrollView style={styles.content}>
         <View style={styles.searchContainer}>
-          <Text style={styles.heroText}>
-            The all-in-one place to find the job of your dreams
-          </Text>
+          <Text style={styles.heroText}>The all-in-one place to find the job of your dreams</Text>
           <View style={styles.searchContainerChild}>
             <TextInput
               style={styles.searchInput}
@@ -85,18 +54,15 @@ const HomeScreen = () => {
               <Feather name="search" size={20} color="white" />
             </TouchableOpacity>
           </View>
-
           <Image
             source={require("../../assets/jobScoutLandingImg.png")}
             style={styles.illustration}
             resizeMode="contain"
           />
         </View>
-
         <Text style={styles.sectionTitle}>
           Or start searching by clicking on one of the cards!
         </Text>
-
         {jobCategories.map((category, index) => (
           <TouchableOpacity key={index} style={styles.categoryCard}>
             <Feather name={category.icon} size={24} color="white" />
@@ -108,7 +74,7 @@ const HomeScreen = () => {
         ))}
       </ScrollView>
 
-      {isMenuOpen && <Menu navigation={useNavigation()} />}
+      {isMenuOpen && <Menu navigation={navigation} closeMenu={() => setIsMenuOpen(false)} />}
     </SafeAreaView>
   );
 };
@@ -208,12 +174,7 @@ const styles = StyleSheet.create({
     padding: 16,
     margin: 16,
   },
-  menuHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 32,
-  },
+  
   menuLinks: {
     marginBottom: 32,
   },
