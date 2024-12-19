@@ -7,7 +7,6 @@ export const fetchJobs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/jobs`);
     console.log("Fetched jobs successfully!");
-    console.log(response.data.jobs);
     return response.data.jobs;
   } catch (error) {
     console.error('Error fetching jobs:', error);

@@ -5,9 +5,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // Importing screens
 import HomeScreen from '../screens/HomeScreen';
-import JobDetailsScreen from '../screens/JobDetailsScreen';
-// import SearchScreen from '../screens/SearchScreen';
+import SearchScreen from '../screens/SearchScreen';
 // import AboutScreen from '../screens/AboutScreen';
+import JobDetailsScreen from '../screens/JobDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,9 +22,9 @@ const AppNavigator = () => {
                 }}
             >
                 <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="Search" component={JobDetailsScreen} />
-                {/* <Stack.Screen name="Search" component={SearchScreen} />
-                <Stack.Screen name="About" component={AboutScreen} /> */}
+                <Stack.Screen name="Search" component={SearchScreen} />
+                {/* <Stack.Screen name="About" component={AboutScreen} /> */}
+                <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     </SafeAreaProvider>
