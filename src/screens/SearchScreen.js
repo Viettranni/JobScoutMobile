@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -10,12 +17,19 @@ import { fetchJobs } from "../services/jobService";
 
 const SearchScreen = ({ route }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(searchTerm);
+  const [searchQuery, setSearchQuery] = useState("");
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
- const navigation = useNavigation();
- const { searchTerm } = route.params;
+  const navigation = useNavigation();
+  const { searchTerm } = route.params;
+  
+  useEffect(() => {
+    // Set searchQuery when searchTerm is available in route params
+    if (route.params?.searchTerm) {
+      setSearchQuery(route.params.searchTerm);
+    }
+  }, [route.params?.searchTerm]); // This will only run when searchTerm changes
 
   useEffect(() => {
     const getJobs = async () => {
@@ -40,14 +54,14 @@ const SearchScreen = ({ route }) => {
   }, [searchTerm]);
 
   const filteredJobs = jobs.filter(
-    job =>
+    (job) =>
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.company.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const renderSkeletonLoader = () => (
     <View style={styles.skeletonContainer}>
-      {[1, 2, 3].map(key => (
+      {[1, 2, 3].map((key) => (
         <View key={key} style={styles.skeletonCard}>
           <View style={styles.skeletonTitle} />
           <View style={styles.skeletonCompany} />
@@ -59,7 +73,14 @@ const SearchScreen = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text onPress={() => { navigation.navigate("Home"); }} style={styles.logo}>Job$cout</Text>
+        <Text
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+          style={styles.logo}
+        >
+          Job$cout
+        </Text>
         <TouchableOpacity onPress={() => setIsMenuOpen(true)}>
           <Feather name="menu" size={24} color="#1D1B3F" />
         </TouchableOpacity>
@@ -67,7 +88,12 @@ const SearchScreen = ({ route }) => {
 
       <View style={styles.searchContainer}>
         <View style={styles.searchWrapper}>
-          <Feather name="search" size={20} color="#666" style={styles.searchIcon} />
+          <Feather
+            name="search"
+            size={20}
+            color="#666"
+            style={styles.searchIcon}
+          />
           <TextInput
             style={styles.searchInput}
             placeholder="Search jobs or companies..."
@@ -84,7 +110,8 @@ const SearchScreen = ({ route }) => {
         <>
           <View style={styles.resultsHeader}>
             <Text style={styles.resultsCount}>
-              {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'} found
+              {filteredJobs.length} {filteredJobs.length === 1 ? "job" : "jobs"}{" "}
+              found
             </Text>
           </View>
           <FlatList
@@ -94,7 +121,9 @@ const SearchScreen = ({ route }) => {
               <JobCard
                 title={item.title}
                 company={item.company}
-                onPress={() => navigation.navigate("JobDetails", { jobId: item._id })}
+                onPress={() =>
+                  navigation.navigate("JobDetails", { jobId: item._id })
+                }
               />
             )}
             contentContainerStyle={styles.listContainer}

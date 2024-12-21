@@ -18,7 +18,7 @@ const Menu = ({ navigation, closeMenu }) => {
         <TouchableOpacity onPress={() => { navigation.navigate("Home"); closeMenu(); }}>
           <Text style={styles.menuLink}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => { navigation.navigate("Search"); closeMenu(); }}>
+        <TouchableOpacity onPress={() => { navigation.navigate("Search", {searchTerm: ""}); closeMenu(); }}>
           <Text style={styles.menuLink}>Search</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { navigation.navigate("About"); closeMenu(); }}>
