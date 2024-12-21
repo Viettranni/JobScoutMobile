@@ -8,13 +8,14 @@ import Menu from "../components/Menu";
 import JobCard from "../components/JobCard";
 import { fetchJobs } from "../services/jobService";
 
-const SearchScreen = () => {
+const SearchScreen = ({ route }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchTerm);
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
  const navigation = useNavigation();
+ const { searchTerm } = route.params;
 
   useEffect(() => {
     const getJobs = async () => {
@@ -30,6 +31,13 @@ const SearchScreen = () => {
 
     getJobs();
   }, []);
+
+  useEffect(() => {
+    // Initialize searchQuery with the passed searchTerm
+    if (searchTerm) {
+      setSearchQuery(searchTerm);
+    }
+  }, [searchTerm]);
 
   const filteredJobs = jobs.filter(
     job =>

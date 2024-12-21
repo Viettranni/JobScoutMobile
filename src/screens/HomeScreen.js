@@ -10,6 +10,8 @@ import Menu from "../components/Menu";
 
 const HomeScreen = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const navigation = useNavigation();
 
   const jobCategories = [
@@ -32,8 +34,8 @@ const HomeScreen = () => {
     },
   ];
 
-  const handleCategory = () => {
-
+  const handleCategory = (category) => {
+      navigation.navigate("Search", { searchTerm: category.title });
   }
 
 
@@ -54,8 +56,12 @@ const HomeScreen = () => {
               style={styles.searchInput}
               placeholder="Search for any job..."
               placeholderTextColor="#666"
+              value={searchTerm}
+              onChangeText={setSearchTerm}
             />
-            <TouchableOpacity style={styles.searchButton}>
+            <TouchableOpacity 
+            style={styles.searchButton} 
+            onPress={() => navigation.navigate("Search", { searchTerm })}>
               <Feather name="search" size={20} color="white" />
             </TouchableOpacity>
           </View>
@@ -69,7 +75,7 @@ const HomeScreen = () => {
           Or start searching by clicking on one of the cards!
         </Text>
         {jobCategories.map((category, index) => (
-          <TouchableOpacity onPress={handleCategory} key={index} style={styles.categoryCard}>
+          <TouchableOpacity onPress={() => handleCategory(category)} key={index} style={styles.categoryCard}>
             <Feather name={category.icon} size={24} color="white" />
             <Text style={styles.categoryTitle}>{category.title}</Text>
             <Text style={styles.categoryDescription}>
