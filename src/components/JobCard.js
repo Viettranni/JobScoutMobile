@@ -1,53 +1,123 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { Feather } from "@expo/vector-icons";
 
 const JobCard = ({ title, company, onPress }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [scaleValue] = useState(new Animated.Value(1));
 
-  
+  const handlePressIn = () => {
+    Animated.spring(scaleValue, {
+      toValue: 0.98,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleValue, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
     <TouchableOpacity
+      activeOpacity={0.9}
       onPress={onPress}
-      style={[styles.card, isHovered && styles.cardHovered]}
-      onPressIn={() => setIsHovered(true)}  // When press starts
-      onPressOut={() => setIsHovered(false)} // When press ends
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
     >
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.company}>{company}</Text>
+      <Animated.View style={[
+        styles.card,
+        { transform: [{ scale: scaleValue }] }
+      ]}>
+        <View style={styles.cardContent}>
+          <View style={styles.headerRow}>
+            <Text style={styles.title} numberOfLines={2}>{title}</Text>
+            <Feather name="chevron-right" size={20} color="#fff" style={styles.arrow} />
+          </View>
+          
+          <View style={styles.companyRow}>
+            <Feather name="briefcase" size={16} color="#f0f0f0" style={styles.icon} />
+            <Text style={styles.company}>{company}</Text>
+          </View>
+
+          <View style={styles.tagsContainer}>
+            <View style={styles.tag}>
+              <Text style={styles.tagText}>Full-time</Text>
+            </View>
+            <View style={styles.tag}>
+              <Text style={styles.tagText}>Remote</Text>
+            </View>
+          </View>
+        </View>
+      </Animated.View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    marginHorizontal: 16,
-    marginVertical: 8,
-    backgroundColor: '#3E3A69',
-    borderRadius: 8,
+    backgroundColor: '#1D1B3F',
+    borderRadius: 16,
+    marginHorizontal: 8,
+    marginVertical: 6,
     shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    elevation: 3, // For Android shadow
+    shadowRadius: 8,
+    elevation: 4,
   },
-  cardHovered: {
-    shadowOpacity: 0.2,
-    borderColor: '#1D1B3F',  
-    elevation: 6, 
+  cardContent: {
+    padding: 16,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#fff',
+    flex: 1,
+    marginRight: 8,
+  },
+  arrow: {
+    marginTop: 2,
+  },
+  companyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  icon: {
+    marginRight: 6,
   },
   company: {
     fontSize: 14,
     color: '#f0f0f0',
+    opacity: 0.9,
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    marginTop: 12,
+    flexWrap: 'wrap',
+  },
+  tag: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 100,
+    marginRight: 8,
+    marginBottom: 4,
+  },
+  tagText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
   },
 });
 

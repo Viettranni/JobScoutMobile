@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
-import Menu from "../components/Menu";
-import { fetchJobs } from "../services/jobService";
 import { FlatList } from "react-native-gesture-handler";
+import Menu from "../components/Menu";
 import JobCard from "../components/JobCard";
+import { fetchJobs } from "../services/jobService";
 
 const SearchScreen = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +30,23 @@ const SearchScreen = () => {
     getJobs();
   }, []);
 
+  const filteredJobs = jobs.filter(
+    job =>
+      job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.company.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const renderSkeletonLoader = () => (
+    <View style={styles.skeletonContainer}>
+      {[1, 2, 3].map(key => (
+        <View key={key} style={styles.skeletonCard}>
+          <View style={styles.skeletonTitle} />
+          <View style={styles.skeletonCompany} />
+        </View>
+      ))}
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -39,23 +56,43 @@ const SearchScreen = () => {
         </TouchableOpacity>
       </View>
 
-        {isLoading ? (
-          <Text>Loading jobs...</Text>
-        ) : (
+      <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <Feather name="search" size={20} color="#666" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search jobs or companies..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholderTextColor="#666"
+          />
+        </View>
+      </View>
+
+      {isLoading ? (
+        renderSkeletonLoader()
+      ) : (
+        <>
+          <View style={styles.resultsHeader}>
+            <Text style={styles.resultsCount}>
+              {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'} found
+            </Text>
+          </View>
           <FlatList
-            data={jobs}
+            data={filteredJobs}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
               <JobCard
                 title={item.title}
                 company={item.company}
-                onPress={() =>
-                  navigation.navigate("JobDetails", { jobId: item._id })
-                }
+                onPress={() => navigation.navigate("JobDetails", { jobId: item._id })}
               />
             )}
+            contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
           />
-        )}
+        </>
+      )}
 
       {isMenuOpen && (
         <Menu navigation={navigation} closeMenu={() => setIsMenuOpen(false)} />
@@ -75,35 +112,69 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
   },
   logo: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#1D1B3F",
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#1D1B3F",
-    marginBottom: 8,
-  },
-  jobList: {
-    flex: 1,
-  },
-  menuOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "white",
+  searchContainer: {
     padding: 16,
-    margin: 16,
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  searchWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+    borderRadius: 12,
+    padding: 12,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: "#333",
+    padding: 0,
+  },
+  resultsHeader: {
+    padding: 16,
+    backgroundColor: "white",
+  },
+  resultsCount: {
+    fontSize: 14,
+    color: "#666",
+    fontWeight: "500",
+  },
+  listContainer: {
+    padding: 8,
+  },
+  skeletonContainer: {
+    padding: 16,
+  },
+  skeletonCard: {
+    backgroundColor: "#f5f5f5",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  skeletonTitle: {
+    height: 20,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 4,
+    marginBottom: 8,
+    width: "80%",
+  },
+  skeletonCompany: {
+    height: 16,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 4,
+    width: "60%",
   },
 });
 
