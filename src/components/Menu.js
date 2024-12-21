@@ -28,11 +28,13 @@ const Menu = ({ navigation, closeMenu }) => {
         <Text style={styles.signInText}>Sign In / Register</Text>
       </TouchableOpacity>
 
+      {/*Move to footer Component*/}
+{/* 
       <View style={styles.menuFooter}>
         <Text style={styles.contactTitle}>Contact us:</Text>
         <Text style={styles.contactInfo}>vttranviet@gmail.com</Text>
         <Text style={styles.contactInfo}>+358449760862</Text>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
@@ -43,10 +45,10 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
     backgroundColor: "white",
     padding: 16,
     margin: 16,
+    borderRadius: 8,
   },
   menuHeader: {
     flexDirection: "row",
@@ -60,7 +62,12 @@ const styles = StyleSheet.create({
     color: "#1D1B3F",
   },
   menuLinks: {
-    marginBottom: 32,
+    marginBottom: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 24,
   },
   menuLink: {
     fontSize: 20,
@@ -79,14 +86,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  menuFooter: {
-    marginTop: "auto",
-    alignItems: "center",
-    backgroundColor: "#1D1B3F",
-    color: "white",
-    padding: 16,
-    borderRadius: 8,
-  },
+  // menuFooter: {
+  //   marginTop: "auto",
+  //   alignItems: "center",
+  //   backgroundColor: "#1D1B3F",
+  //   color: "white",
+  //   padding: 16,
+  //   borderRadius: 8,
+  // },
   contactTitle: {
     fontSize: 16,
     color: "white",
