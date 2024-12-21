@@ -11,9 +11,10 @@ import { fetchJobs } from "../services/jobService";
 const SearchScreen = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const navigation = useNavigation();
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+ const navigation = useNavigation();
 
   useEffect(() => {
     const getJobs = async () => {
@@ -50,7 +51,7 @@ const SearchScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.logo}>Job$cout</Text>
+        <Text onPress={() => { navigation.navigate("Home"); }} style={styles.logo}>Job$cout</Text>
         <TouchableOpacity onPress={() => setIsMenuOpen(true)}>
           <Feather name="menu" size={24} color="#1D1B3F" />
         </TouchableOpacity>

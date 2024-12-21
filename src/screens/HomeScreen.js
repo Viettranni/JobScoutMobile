@@ -4,6 +4,7 @@ import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import Footer from "../components/Footer"
 import Menu from "../components/Menu";
 
 
@@ -31,11 +32,15 @@ const HomeScreen = () => {
     },
   ];
 
+  const handleCategory = () => {
+
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.logo}>Job$cout</Text>
+        <Text onPress={() => { navigation.navigate("Home"); }} style={styles.logo}>Job$cout</Text>
         <TouchableOpacity onPress={() => setIsMenuOpen(true)}>
           <Feather name="menu" size={24} color="#1D1B3F" />
         </TouchableOpacity>
@@ -64,7 +69,7 @@ const HomeScreen = () => {
           Or start searching by clicking on one of the cards!
         </Text>
         {jobCategories.map((category, index) => (
-          <TouchableOpacity key={index} style={styles.categoryCard}>
+          <TouchableOpacity onPress={handleCategory} key={index} style={styles.categoryCard}>
             <Feather name={category.icon} size={24} color="white" />
             <Text style={styles.categoryTitle}>{category.title}</Text>
             <Text style={styles.categoryDescription}>
@@ -72,9 +77,12 @@ const HomeScreen = () => {
             </Text>
           </TouchableOpacity>
         ))}
+
+        <Footer />
       </ScrollView>
 
       {isMenuOpen && <Menu navigation={navigation} closeMenu={() => setIsMenuOpen(false)} />}
+      
     </SafeAreaView>
   );
 };

@@ -5,7 +5,7 @@ const BASE_URL = 'http://192.168.0.108:4000/api';
 
 export const fetchJobs = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/jobs`);
+    const response = await axios.get(`${BASE_URL}/mobile/mobileGetAll`);
     console.log("Fetched jobs successfully!");
     return response.data.jobs;
   } catch (error) {

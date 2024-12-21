@@ -3,10 +3,12 @@ import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet } from "react-na
 import { Feather } from "@expo/vector-icons";
 
 const Menu = ({ navigation, closeMenu }) => {
+
+
   return (
     <SafeAreaView style={styles.menuOverlay}>
       <View style={styles.menuHeader}>
-        <Text style={styles.logo}>Job$cout</Text>
+        <Text onPress={() => { navigation.navigate("Home"); }} style={styles.logo}>Job$cout</Text>
         <TouchableOpacity onPress={closeMenu}>
           <Feather name="x" size={24} color="#1D1B3F" />
         </TouchableOpacity>
@@ -24,17 +26,11 @@ const Menu = ({ navigation, closeMenu }) => {
         </TouchableOpacity>
       </View>
 
+      <View style={styles.divider} />
+
       <TouchableOpacity style={styles.signInButton}>
         <Text style={styles.signInText}>Sign In / Register</Text>
       </TouchableOpacity>
-
-      {/*Move to footer Component*/}
-{/* 
-      <View style={styles.menuFooter}>
-        <Text style={styles.contactTitle}>Contact us:</Text>
-        <Text style={styles.contactInfo}>vttranviet@gmail.com</Text>
-        <Text style={styles.contactInfo}>+358449760862</Text>
-      </View> */}
     </SafeAreaView>
   );
 };
@@ -86,22 +82,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  // menuFooter: {
-  //   marginTop: "auto",
-  //   alignItems: "center",
-  //   backgroundColor: "#1D1B3F",
-  //   color: "white",
-  //   padding: 16,
-  //   borderRadius: 8,
-  // },
-  contactTitle: {
-    fontSize: 16,
-    color: "white",
-    marginBottom: 8,
-  },
-  contactInfo: {
-    color: "white",
-    marginBottom: 4,
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor:"#light",
+    marginBottom: 12,
   },
 });
 
