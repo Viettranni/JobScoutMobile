@@ -47,14 +47,36 @@ export const AuthProvider = ({ children }) => {
       });
       const { token, user } = response.data;
 
-      // Save token to local storage or secure storage (in mobile apps)
-      localStorage.setItem("authToken", token);
-
       // Save token securely
       await saveTokenToSecureStorage(token);
 
       // Update state
       setUser(user);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error(
+        "Login failed:",
+        error.response?.data?.message || error.message
+      );
+      throw error;
+    }
+  };
+
+  const register = async (email, password, firstname, lastname) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/users/register`, {
+        email,
+        password,
+        firstname,
+        lastname,
+      });
+      const { token, newUser } = response.data;
+
+      // Save token securely
+      await saveTokenToSecureStorage(token);
+
+      // Update state
+      setUser(newUser);
       setIsAuthenticated(true);
     } catch (error) {
       console.error(
@@ -74,43 +96,28 @@ export const AuthProvider = ({ children }) => {
   // Check authentication status on app load
   const checkAuth = async () => {
     try {
-      const token = await getTokenFromSecureStorage();
-
+      const token = await getTokenFromSecureStorage();  // Get token from secure storage
+  
+      // If no token is found, set authentication to false
       if (!token) {
         setIsAuthenticated(false);
+        console.log("User is not authenticated");
         return;
       }
-
-      // Fetch profile and favorites simultaneously
-      const [profileResponse, favouritesResponse, appliedJobsResponse] =
-        await Promise.all([
-          axios.get(`${BASE_URL}/profile`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get(`${BASE_URL}/favourites`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get(`${BASE_URL}/appliedJobs`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-
-      console.log("Profile:", profileResponse.data);
-      console.log("Favourites:", favouritesResponse.data);
-      console.log("Applied Jobs:", appliedJobsResponse.data);
-
-      setUser(response.data.user);
+  
+      // If a token is found, consider the user authenticated
+      console.log("User is authenticated!")
       setIsAuthenticated(true);
     } catch (error) {
       console.error(
         "Authentication check failed:",
         error.response?.data?.message || error.message
       );
-      setIsAuthenticated(false);
+      setIsAuthenticated(false);  // Set authentication to false in case of error
     } finally {
-      setLoading(false);
+      setLoading(false);  // Stop loading state
     }
-  };
+  };  
 
   useEffect(() => {
     checkAuth();
@@ -118,7 +125,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, loading, checkAuth }}
+      value={{ user, isAuthenticated, login, logout, loading, checkAuth, register }}
     >
       {children}
     </AuthContext.Provider>

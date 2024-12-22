@@ -1,36 +1,82 @@
-import React from "react";
-import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useContext } from "react";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { AuthContext } from "../context/AuthContext";
 
 const Menu = ({ navigation, closeMenu }) => {
-
+  const { isAuthenticated, logout } = useContext(AuthContext);
 
   return (
     <SafeAreaView style={styles.menuOverlay}>
       <View style={styles.menuHeader}>
-        <Text onPress={() => { navigation.navigate("Home"); }} style={styles.logo}>Job$cout</Text>
+        <Text
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+          style={styles.logo}
+        >
+          Job$cout
+        </Text>
         <TouchableOpacity onPress={closeMenu}>
           <Feather name="x" size={24} color="#1D1B3F" />
         </TouchableOpacity>
       </View>
 
       <View style={styles.menuLinks}>
-        <TouchableOpacity onPress={() => { navigation.navigate("Home"); closeMenu(); }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Home");
+            closeMenu();
+          }}
+        >
           <Text style={styles.menuLink}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => { navigation.navigate("Search", {searchTerm: ""}); closeMenu(); }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Search", { searchTerm: "" });
+            closeMenu();
+          }}
+        >
           <Text style={styles.menuLink}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => { navigation.navigate("About"); closeMenu(); }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("About");
+            closeMenu();
+          }}
+        >
           <Text style={styles.menuLink}>About</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.divider} />
 
-      <TouchableOpacity onPress={() => { navigation.navigate("LoginRegister"); closeMenu(); }} style={styles.signInButton}>
-        <Text style={styles.signInText}>Sign In / Register</Text>
-      </TouchableOpacity>
+      {isAuthenticated ? (
+        <TouchableOpacity
+          onPress={() => {
+            logout();
+          }}
+          style={styles.signInButton}
+        >
+          <Text style={styles.signInText}>Logout</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("LoginRegister");
+            closeMenu();
+          }}
+          style={styles.signInButton}
+        >
+          <Text style={styles.signInText}>Sign In / Register</Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };
@@ -84,7 +130,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     borderBottomWidth: 1,
-    borderBottomColor:"#light",
+    borderBottomColor: "#light",
     marginBottom: 12,
   },
 });

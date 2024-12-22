@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -11,18 +11,36 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
+import { AuthContext } from '../context/AuthContext'; 
 
 const LoginRegisterScreen = ({ navigation }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
+  const { login, register } = useContext(AuthContext);
 
-  const handleSubmit = () => {
-    // TODO: Implement login/register logic
-    console.log(isLogin ? 'Logging in...' : 'Registering...', { email, password, firstName, lastName });
+  const BASE_URL = 'http://192.168.0.108:4000/api'; 
+
+  const handleSubmit = async () => {
+    try {
+      if (isLogin) {
+        await login(email, password);
+        console.log("Login successful!");
+        navigation.navigate("Home");
+      } else {
+        await register(email, password, firstname, lastname);
+        console.log("Register successful!");
+        // TODO: Implement the Welcome Screen!
+        navigation.navigate("Home");
+      }
+    } catch (error) {
+      console.error('Error during login/register:', error);
+      
+    }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,7 +64,7 @@ const LoginRegisterScreen = ({ navigation }) => {
                 <TextInput
                   style={styles.input}
                   placeholder="Firstname"
-                  value={firstName}
+                  value={firstname}
                   onChangeText={setFirstName}
                   autoCapitalize="words"
                 />
@@ -57,7 +75,7 @@ const LoginRegisterScreen = ({ navigation }) => {
                 <TextInput
                   style={styles.input}
                   placeholder="Lastname"
-                  value={lastName}
+                  value={lastname}
                   onChangeText={setLastName}
                   autoCapitalize="words"
                 />
