@@ -28,7 +28,7 @@ const Menu = ({ navigation, closeMenu }) => {
 
       <View style={styles.divider} />
 
-      <TouchableOpacity style={styles.signInButton}>
+      <TouchableOpacity onPress={() => { navigation.navigate("LoginRegister"); closeMenu(); }} style={styles.signInButton}>
         <Text style={styles.signInText}>Sign In / Register</Text>
       </TouchableOpacity>
     </SafeAreaView>
