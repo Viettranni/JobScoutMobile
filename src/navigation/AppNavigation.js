@@ -10,6 +10,7 @@ import SearchScreen from '../screens/SearchScreen';
 import JobDetailsScreen from '../screens/JobDetailsScreen';
 import LoginRegisterScreen from '../screens/LoginRegisterScreen';
 import LoadingScreen from '../screens/LoadingScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
 // import ProfileScreen from '../screens/ProfileScreen'; 
 
 
@@ -47,6 +48,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="JobDetails" component={JobDetailsScreen} />
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
 
           {/* Private Screens (only accessible when authenticated) */}
           {user && (

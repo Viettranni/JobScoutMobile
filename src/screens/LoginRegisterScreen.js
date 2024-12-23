@@ -32,8 +32,8 @@ const LoginRegisterScreen = ({ navigation }) => {
       } else {
         await register(email, password, firstname, lastname);
         console.log("Register successful!");
-        // TODO: Implement the Welcome Screen!
-        navigation.navigate("Home");
+        // Upon registeration it would direct to the Welcome Screen
+        navigation.navigate('Welcome', { userName: firstname });
       }
     } catch (error) {
       console.error('Error during login/register:', error);
