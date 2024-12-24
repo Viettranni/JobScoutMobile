@@ -1,7 +1,7 @@
 // src/services/jobService.js
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.0.108:4000/api'; 
+const BASE_URL = 'http://localhost:4000/api'; 
 
 export const fetchJobs = async () => {
   try {
